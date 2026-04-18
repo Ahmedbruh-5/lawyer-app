@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #003b73;
+  --secondary: #475569;
+  --tertiary: #652901;
+  --neutral: #76777c;
+  --surface: #f3f4f8;
+  --surface-strong: #ffffff;
+  --text-main: #1f2937;
+  --text-soft: #5f6472;
+  --border-soft: #d8dde7;
+  --accent-soft: #d9e6f7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html[data-theme="light"] body {
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+
+html[data-theme="dark"] body {
+  background-color: #020c1b;
+  color: #f1f5f9;
+}
+
+html:not([data-theme]) body {
+  background-color: #e9eaf0;
+  color: var(--text-main);
+}
+
+@keyframes heroFloatA {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(18px, -14px, 0) scale(1.08);
+  }
+}
+
+@keyframes heroFloatB {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-16px, 16px, 0) scale(0.92);
+  }
+}
+
+@keyframes heroPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.14);
+    opacity: 0.2;
+  }
+}
+
+@keyframes heroGridShift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 42px 42px, -42px -42px;
+  }
+}
+
+@keyframes authEnterFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes authEnterFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes authExitToRight {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+}
+
+@keyframes authExitToLeft {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+.hero-fade {
+  opacity: 1;
+}

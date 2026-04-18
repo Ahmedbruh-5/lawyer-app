@@ -1,0 +1,196 @@
+.admin-table-container {
+  background-color: #ffffff;
+  border-radius: 1px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin: 1rem;
+  padding: 3rem;
+  min-height: calc(100vh - 2rem);
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  padding: 0 0.5rem;
+}
+
+.admin-header h5 {
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.filters-container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-start; /* Move to the left */
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+/* Reduce the size of search and filter fields */
+.search-field, .filter-field {
+  width: 180px; /* Reduced width */
+  height: 30px; /* Reduced height */
+  padding: 5px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+/* Table wrapper styling */
+.table-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  background-color: white;
+}
+
+/* Table header styling */
+.table-header th {
+  padding: 0.75rem;
+  font-size: 0.813rem;
+  color: rgb(255, 255, 255);
+  background-color: #3381ff;
+  font-weight: 600;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.table-header th:last-child {
+  border-right: none;
+}
+
+/* Alternating row colors */
+.table-row:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.table-row:nth-child(odd) {
+  background-color: #e9e9e9;
+}
+
+/* Row hover effect */
+.table-row:hover {
+  background-color: #d6d7d7 !important;
+  transition: background-color 0.2s ease;
+}
+
+/* Selected row styling */
+.selected-row {
+  background-color: #e8f0fe !important;
+}
+
+/* Table cell styling with borders */
+.table-cell {
+  padding: 0.75rem;
+  font-size: 0.813rem;
+  border-bottom: 1px solid #000000;
+  border-right: 1px solid #000000;
+}
+
+.table-cell:last-child {
+  border-right: none;
+}
+
+/* Add border to checkbox cells */
+.checkbox-cell {
+  width: 18px;
+  padding-left: 1rem !important;
+  border-right: 2px solid #e5e7eb;
+}
+
+.checkbox-header {
+  width: 48px;
+  padding-left: 1rem !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Avatar styling */
+.avatar {
+  width: 32px;
+  height: 32px;
+}
+
+/* Chip styling */
+.chip {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.chip-success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.chip-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.chip-error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.chip-default {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.chip-primary {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+/* Pagination styling */
+.pagination {
+  padding: 0rem;
+  border-top: 1px solid #e5e7eb;
+  align-items: flex-end;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 0rem;
+  justify-content: flex-end;
+}
+.action-buttons .MuiIconButton-root:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 2px; /* Makes it square */
+  padding: 8px;
+  height: 50px;
+}
+/* Bulk Actions Styling */
+.bulk-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  justify-content: flex-start;
+}
+
+.bulk-actions button {
+  font-size: 0.813rem; /* Smaller font */
+  padding: 4px 10px; /* Smaller padding */
+  min-width: 80px; /* Reduce button width */
+  height: 32px; /* Reduce button height */
+  border-radius: 4px; /* Keep slight rounded corners */
+  text-transform: none; /* Prevent uppercase text */
+}
+
+/* Reduce padding inside buttons */
+.bulk-actions button.MuiButton-root {
+  padding: 4px 12px;
+}
+
+/* Reduce hover effect size */
+.bulk-actions button:hover {
+  opacity: 0.9;
+}
+
