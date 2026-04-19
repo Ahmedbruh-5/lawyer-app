@@ -16,8 +16,10 @@ langchain-community>=0.4,<1.0
 langchain-classic>=1.0,<2.0
 
 # --- Vector store -------------------------------------------------------------
-# Pin below 1.11: newer releases may be sdist-only on older macOS/x86_64 (needs SWIG to build).
-faiss-cpu>=1.9.0,<1.11
+# Keep older pin for macOS/x86_64 compatibility, but allow newer wheels on Python 3.14+
+# (Render default Python 3.14 only exposes faiss-cpu >= 1.12 at the moment).
+faiss-cpu>=1.9.0,<1.11; python_version < "3.14"
+faiss-cpu>=1.12,<1.14; python_version >= "3.14"
 
 # --- Embedding backbone -------------------------------------------------------
 # sentence-transformers pulls torch + huggingface_hub + transformers.
