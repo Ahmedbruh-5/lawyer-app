@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { loginUser } from '../../services/userAPIS'
 
 import { setStoredAccessToken, pickTokenFromLoginResponse, setStoredUser } from '../../utils/authTokenStorage'
+import { notifyError } from '../../utils/swal'
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -13,14 +14,11 @@ function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState('')
-
   const handleSubmit = async (event) => {
     event.preventDefault()
-    setError('')
 
     if (!email.trim() || !password.trim()) {
-      setError('Please enter email and password.')
+      notifyError('Missing fields', 'Please enter email and password.')
       return
     }
 
@@ -34,7 +32,14 @@ function LoginPage() {
       setStoredUser(data.user)
       navigate('/home')
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.')
+      const body = err.response?.data
+      if (body?.requiresVerification && body?.email) {
+        navigate('/signup', {
+          state: { step: 'verify', email: body.email },
+        })
+        return
+      }
+      notifyError('Login failed', body?.message || 'Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -70,8 +75,6 @@ function LoginPage() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-
-        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
 
         <button
           type="submit"

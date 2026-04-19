@@ -1,9 +1,11 @@
 import FeaturePageLayout from './FeaturePageLayout'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getStatutes, getStatuteById, getStatuteFiltersMeta } from '../../services/statuteAPIs'
 import { useSiteTheme } from '../../hooks/useSiteTheme'
 
 function StatuteSearchPage() {
+  const { t } = useTranslation()
   const { isDark } = useSiteTheme()
   const [search, setSearch] = useState('')
   const [type, setType] = useState('')
@@ -92,8 +94,8 @@ function StatuteSearchPage() {
 
   return (
     <FeaturePageLayout
-      title="Statutes"
-      subtitle="Browse acts & ordinances from the database. Use search and filters to find what you need."
+      title={t('features.statutes.title')}
+      subtitle={t('features.statutes.subtitle')}
     >
       <div className="mb-4 grid gap-3 md:grid-cols-3">
         <input

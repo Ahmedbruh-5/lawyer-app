@@ -1,45 +1,34 @@
 const fs = require('fs/promises');
 const path = require('path');
 const PenalCode = require('../models/PenalCode');
+const {
+  normalizeFromParsed,
+  dedupeBySection,
+  defaultPenalImportPath,
+  legacyFrontendDataPath,
+} = require('../utils/penalCodeNormalizer');
 
-const normalizePenalCodeRecords = (parsed) => {
-  const chapters = Array.isArray(parsed)
-    ? parsed
-    : Array.isArray(parsed.chapters)
-      ? parsed.chapters
-      : [];
+const BATCH_SIZE = 80;
 
-  return chapters.flatMap((chapterItem) => {
-    const chapter = chapterItem.chapter || 'Unknown Chapter';
-    const chapterTitle = chapterItem.title || '';
-    const sections = Array.isArray(chapterItem.sections)
-      ? chapterItem.sections
-      : Array.isArray(chapterItem.offenses)
-        ? chapterItem.offenses
-        : [];
+const resolveImportFilePath = (req) => {
+  const queryFile = req.query.file && String(req.query.file).trim();
+  const queryPath = req.query.path && String(req.query.path).trim();
 
-    return sections
-      .filter((sectionItem) => sectionItem.section)
-      .map((sectionItem) => ({
-        chapter,
-        chapterTitle,
-        section: String(sectionItem.section).trim(),
-        title: sectionItem.title || '',
-        content: sectionItem.content || sectionItem.description || '',
-      }));
-  });
-};
+  if (queryPath) {
+    return path.isAbsolute(queryPath) ? queryPath : path.resolve(process.cwd(), queryPath);
+  }
 
-const dedupeBySection = (records) => {
-  const uniqueBySection = new Map();
+  const envPath = process.env.PENAL_CODES_IMPORT_PATH;
+  if (envPath) {
+    return path.isAbsolute(envPath) ? envPath : path.resolve(process.cwd(), envPath);
+  }
 
-  records.forEach((record) => {
-    if (!record.section) return;
-    // Keep the last occurrence for each section key.
-    uniqueBySection.set(record.section, record);
-  });
+  if (queryFile || process.env.PENAL_CODES_FILE) {
+    const name = queryFile || process.env.PENAL_CODES_FILE;
+    return legacyFrontendDataPath(name);
+  }
 
-  return Array.from(uniqueBySection.values());
+  return defaultPenalImportPath();
 };
 
 const getPenalCodes = async (req, res) => {
@@ -62,9 +51,7 @@ const getPenalCodes = async (req, res) => {
       };
     }
 
-    const codes = await PenalCode.find(query)
-      .sort({ section: 1 })
-      .limit(parsedLimit);
+    const codes = await PenalCode.find(query).sort({ title: 1 }).limit(parsedLimit);
 
     return res.status(200).json({
       count: codes.length,
@@ -77,26 +64,29 @@ const getPenalCodes = async (req, res) => {
 
 const importPenalCodes = async (req, res) => {
   try {
-    const sourceFileName = req.query.file || process.env.PENAL_CODES_FILE || 'cleanPPC.json';
-    const filePath = path.resolve(__dirname, `../../../frontend/src/data/${sourceFileName}`);
+    const filePath = resolveImportFilePath(req);
     const raw = await fs.readFile(filePath, 'utf8');
     const parsed = JSON.parse(raw);
-    const records = normalizePenalCodeRecords(parsed);
+    const records = normalizeFromParsed(parsed);
     const dedupedRecords = dedupeBySection(records);
 
     if (!dedupedRecords.length) {
       return res.status(400).json({
         message:
-          'No penal code records found to import. Expected sections/offenses with section numbers.',
+          'No penal code records found to import. Expected acts corpus (act_title + text/doc_id) or chapters with sections.',
       });
     }
 
     await PenalCode.deleteMany({});
-    await PenalCode.insertMany(dedupedRecords, { ordered: false });
+
+    for (let i = 0; i < dedupedRecords.length; i += BATCH_SIZE) {
+      const batch = dedupedRecords.slice(i, i + BATCH_SIZE);
+      await PenalCode.insertMany(batch, { ordered: false });
+    }
 
     return res.status(200).json({
       message: 'Penal codes replaced successfully',
-      sourceFileName,
+      filePath,
       replacedAllRecords: true,
       insertedCount: dedupedRecords.length,
       totalProcessed: records.length,

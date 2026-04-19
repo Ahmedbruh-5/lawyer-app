@@ -49,7 +49,7 @@ const ActiveUsersData = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="bg-white w-150 h-90 rounded-xl p-10">
+    <div className="h-90 w-150 rounded-xl bg-white p-10 text-slate-900">
       {/* <h2>
         Active Users in the Last {days === 0 ? "All Time" : `${days} Days`}
       </h2> */}

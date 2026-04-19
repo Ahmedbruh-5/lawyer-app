@@ -1,5 +1,6 @@
 import FeaturePageLayout from './FeaturePageLayout'
 import { useEffect, useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getSanctions } from '../../services/sanctionAPI'
 import { useSiteTheme } from '../../hooks/useSiteTheme'
 
@@ -109,6 +110,7 @@ function DetailPanel({ row, onClose }) {
 }
 
 function SanctionsCheckerPage() {
+  const { t } = useTranslation()
   const { isDark } = useSiteTheme()
   const [search, setSearch] = useState('')
   const [sanctions, setSanctions] = useState([])
@@ -191,8 +193,8 @@ function SanctionsCheckerPage() {
 
   return (
     <FeaturePageLayout
-      title="Sanctions Checker"
-      subtitle="Screen individuals and entities against the NACTA proscribed persons list under Anti Terrorism Act 1997."
+      title={t('features.sanctions_checker.title')}
+      subtitle={t('features.sanctions_checker.subtitle')}
     >
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">

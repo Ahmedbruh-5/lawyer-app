@@ -12,8 +12,8 @@ const UserGrowthChart = ({ data }) => {
   const latestCumulative = lastIndex >= 0 ? cumulativeData[lastIndex] : 0;
 
   return (
-    <div className="rounded-lg border border-slate-200 p-4">
-      <h3 className="mb-3 text-base font-semibold">User Growth Overview</h3>
+    <div className="rounded-lg border border-slate-200 p-4 text-slate-900">
+      <h3 className="mb-3 text-base font-semibold text-slate-900">User Growth Overview</h3>
       <div className="mb-3 text-sm text-slate-600">
         Latest Daily: <span className="font-semibold text-slate-900">{latestDaily}</span> | Total:{" "}
         <span className="font-semibold text-slate-900">{latestCumulative}</span>
@@ -22,17 +22,17 @@ const UserGrowthChart = ({ data }) => {
         <table className="w-full text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="px-3 py-2 text-left">Date</th>
-              <th className="px-3 py-2 text-left">Daily</th>
-              <th className="px-3 py-2 text-left">Cumulative</th>
+              <th className="px-3 py-2 text-left text-slate-900">Date</th>
+              <th className="px-3 py-2 text-left text-slate-900">Daily</th>
+              <th className="px-3 py-2 text-left text-slate-900">Cumulative</th>
             </tr>
           </thead>
           <tbody>
             {data.slice(-20).map((item) => (
               <tr key={item.date} className="border-t border-slate-100">
-                <td className="px-3 py-2">{item.date}</td>
-                <td className="px-3 py-2">{item.daily}</td>
-                <td className="px-3 py-2">{item.cumulative}</td>
+                <td className="px-3 py-2 text-slate-800">{item.date}</td>
+                <td className="px-3 py-2 text-slate-800">{item.daily}</td>
+                <td className="px-3 py-2 text-slate-800">{item.cumulative}</td>
               </tr>
             ))}
           </tbody>

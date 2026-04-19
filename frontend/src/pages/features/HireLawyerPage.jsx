@@ -1,10 +1,14 @@
 import FeaturePageLayout from './FeaturePageLayout'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import LawyerProfileModal from '../../components/lawyer/LawyerProfileModal'
 import { getLawyers } from '../../services/lawyerAPIs'
 import { useSiteTheme } from '../../hooks/useSiteTheme'
 
 function HireLawyerPage() {
+  const { t } = useTranslation()
   const { isDark } = useSiteTheme()
+  const [profileLawyer, setProfileLawyer] = useState(null)
   const [lawyers, setLawyers] = useState([])
   const [search, setSearch] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -35,10 +39,24 @@ function HireLawyerPage() {
     fetchLawyers(search)
   }, [search])
 
+  useEffect(() => {
+    if (!profileLawyer) return
+    const onKey = (event) => {
+      if (event.key === 'Escape') setProfileLawyer(null)
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [profileLawyer])
+
   return (
     <FeaturePageLayout
-      title="Hire a Lawyer"
-      subtitle="Browse verified legal professionals from database."
+      title={t('features.hire_lawyer.title')}
+      subtitle={t('features.hire_lawyer.subtitle')}
     >
 
       <div className="mb-4">
@@ -78,12 +96,18 @@ function HireLawyerPage() {
               <span>{lawyer.location}</span>
               <span>{lawyer.rate}</span>
             </div>
-            <button className="mt-4 rounded-lg bg-[#1d4ed8] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2563eb]">
+            <button
+              type="button"
+              className="mt-4 rounded-lg bg-[#1d4ed8] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2563eb]"
+              onClick={() => setProfileLawyer(lawyer)}
+            >
               View Profile
             </button>
           </article>
         ))}
       </div>
+
+      <LawyerProfileModal lawyer={profileLawyer} onClose={() => setProfileLawyer(null)} isDark={isDark} />
 
       {!isLoading && !lawyers.length && !error && (
         <p className={`mt-4 text-sm ${isDark ? 'text-[#9ab4ce]' : 'text-slate-600'}`}>No lawyers found.</p>

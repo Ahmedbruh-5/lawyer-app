@@ -32,12 +32,14 @@ const Dashboard = () => {
   }, []);
 
   if (loading) {
-    return <div className="p-8">Loading dashboard...</div>;
+    return (
+      <div className="admin-root p-8 text-slate-900">Loading dashboard...</div>
+    );
   }
 
   if (!isAdmin) {
     return (
-      <div className="p-8">
+      <div className="admin-root p-8 text-slate-900">
         <h2 className="text-xl font-semibold">Access denied</h2>
         <p className="text-gray-600 mt-2">Only admins can access the dashboard.</p>
       </div>
@@ -51,7 +53,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col antialiased">
+    <div className="admin-root flex min-h-screen flex-col bg-slate-200 text-slate-900 antialiased">
       <Header />
       <div className="flex">
         <Sidebar setActivePage={setActivePage} activePage={activePage} />

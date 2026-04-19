@@ -13,7 +13,7 @@ function HomeFooter({ contentShell }) {
     >
       <div className={contentShell}>
         <div
-          className={`flex flex-col gap-6 py-4 text-sm md:flex-row md:justify-between ${
+          className={`flex flex-col gap-8 py-4 text-sm md:flex-row md:justify-between ${
             isDark ? 'text-slate-300' : 'text-slate-600'
           }`}
         >
@@ -35,10 +35,22 @@ function HomeFooter({ contentShell }) {
             </div>
             <div>
               <p className={`font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>Contact</p>
-              <p className="mt-2">support@advokatedesk.com</p>
-              <p>+94 000 0000</p>
+              <p className="mt-2">contact.advocatedesk@gmail.com</p>
+              <p>+92 300 0000000</p>
             </div>
           </div>
+        </div>
+        <div
+          className={`border-t pb-2 pt-6 text-center text-xs ${
+            isDark ? 'border-slate-700 text-slate-400' : 'border-slate-300 text-slate-500'
+          }`}
+        >
+          © {new Date().getFullYear()}{' '}
+          <span className="inline-flex items-baseline gap-0">
+            <span className="font-medium">AdvokateDesk</span>
+            <sup className="ml-0.5 text-[0.7em] font-normal">®</sup>
+          </span>
+          . All rights reserved.
         </div>
       </div>
     </footer>

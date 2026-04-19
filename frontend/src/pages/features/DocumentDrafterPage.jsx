@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FeaturePageLayout from './FeaturePageLayout'
 import { useSiteTheme } from '../../hooks/useSiteTheme'
+import { notifyError } from '../../utils/swal'
 
 const docTypes = {
   en: [
@@ -293,7 +294,10 @@ function DocumentDrafterPage() {
       const fileBase = currentDoc?.id || 'legal-draft'
       pdf.save(`${fileBase}.pdf`)
     } catch {
-      alert(docLanguage === 'ur' ? 'پی ڈی ایف ڈاؤن لوڈ میں مسئلہ پیش آیا۔' : 'Failed to download PDF.')
+      notifyError(
+        docLanguage === 'ur' ? 'پی ڈی ایف' : 'PDF download',
+        docLanguage === 'ur' ? 'پی ڈی ایف ڈاؤن لوڈ میں مسئلہ پیش آیا۔' : 'Failed to download PDF.',
+      )
     } finally {
       setIsDownloading(false)
     }
@@ -328,7 +332,10 @@ function DocumentDrafterPage() {
       a.click()
       URL.revokeObjectURL(url)
     } catch {
-      alert(docLanguage === 'ur' ? 'ورڈ فائل ڈاؤن لوڈ میں مسئلہ پیش آیا۔' : 'Failed to download Word file.')
+      notifyError(
+        docLanguage === 'ur' ? 'ورڈ فائل' : 'Word download',
+        docLanguage === 'ur' ? 'ورڈ فائل ڈاؤن لوڈ میں مسئلہ پیش آیا۔' : 'Failed to download Word file.',
+      )
     } finally {
       setIsDownloading(false)
     }

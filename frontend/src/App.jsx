@@ -12,7 +12,7 @@ import StatuteSearchPage from './pages/features/StatuteSearchPage'
 import DocumentDrafterPage from './pages/features/DocumentDrafterPage'
 import UserPanel from './admin/userPanel/UserPanel'
 import Dashboard from './admin/Dashboard'
-// import AdvokateChat from './components/chat/AdvokateChat'
+import KnowbaseWidgetGate from './components/embed/KnowbaseWidgetGate'
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
       <Route path="/admin/users" element={<UserPanel />} />
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
-    {/* <AdvokateChat /> */}
+    <KnowbaseWidgetGate />
     </>
   )
 }

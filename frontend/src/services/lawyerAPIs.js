@@ -12,3 +12,13 @@ export const addLawyer = async (payload) => {
   return data
 }
 
+export const updateLawyer = async (id, payload) => {
+  const { data } = await apiClient.put(`/api/lawyers/${id}`, payload)
+  return data
+}
+
+export const deleteLawyer = async (id) => {
+  const { data } = await apiClient.delete(`/api/lawyers/${id}`)
+  return data
+}
+

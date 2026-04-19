@@ -39,8 +39,49 @@ const getLawyers = async (req, res) => {
   }
 }
 
+const updateLawyer = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { name, specialty, location, rate, phone, email, bio = '', verified = true } = req.body
+
+    if (!name || !specialty || !location || !rate || !phone || !email) {
+      return res
+        .status(400)
+        .json({ message: 'name, specialty, location, rate, phone and email are required' })
+    }
+
+    const lawyer = await Lawyer.findByIdAndUpdate(
+      id,
+      { name, specialty, location, rate, phone, email, bio, verified },
+      { new: true, runValidators: true },
+    )
+
+    if (!lawyer) {
+      return res.status(404).json({ message: 'Lawyer not found' })
+    }
+
+    return res.status(200).json(lawyer)
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+const deleteLawyer = async (req, res) => {
+  try {
+    const deleted = await Lawyer.findByIdAndDelete(req.params.id)
+    if (!deleted) {
+      return res.status(404).json({ message: 'Lawyer not found' })
+    }
+    return res.status(200).json({ message: 'Lawyer deleted', id: req.params.id })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
 module.exports = {
   addLawyer,
   getLawyers,
+  updateLawyer,
+  deleteLawyer,
 }
 

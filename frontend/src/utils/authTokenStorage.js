@@ -1,6 +1,16 @@
 const STORAGE_KEY = "pysimverse_jwt";
 const USER_KEY = "advokate_desk_user";
 
+function emitAdvokateAuthChange() {
+  try {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("advokate-auth-change"));
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
 export function getStoredAccessToken() {
   try {
     return localStorage.getItem(STORAGE_KEY) || "";
@@ -19,6 +29,7 @@ export function setStoredAccessToken(token) {
   } catch {
     /* ignore quota / private mode */
   }
+  emitAdvokateAuthChange();
 }
 
 export function clearStoredAccessToken() {
@@ -28,6 +39,7 @@ export function clearStoredAccessToken() {
   } catch {
     /* ignore */
   }
+  emitAdvokateAuthChange();
 }
 
 export function setStoredUser(user) {

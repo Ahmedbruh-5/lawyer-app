@@ -1,11 +1,37 @@
 {
   "hero": {
-    "badge": "Institutional Legal Intelligence",
+    "badge": "Smart Legal Solutions",
     "headline": "AdvokateDesk.",
     "rotating": "Law simplified for everyone.",
     "subtext": "Hire verified lawyers, search the penal code, check sanctions, and manage your legal matters - all in one secure platform built for individuals and institutions.",
     "search_placeholder": "Search by jurisdiction, practice area, or matter type...",
-    "cta": "Find Counsel"
+    "cta": "Find Counsel",
+    "cards": {
+      "hire_lawyer": {
+        "title": "Hire a Lawyer",
+        "desc": "Connect with vetted counsel in 24h"
+      },
+      "lawyer_bot": {
+        "title": "Lawyer Bot",
+        "desc": "Chat with our Pakistani-law assistant"
+      },
+      "penal_code": {
+        "title": "Penal Code Search",
+        "desc": "Browse statutes & case law"
+      },
+      "sanctions_checker": {
+        "title": "Sanctions Checker",
+        "desc": "Screen parties & entities"
+      },
+      "statutes": {
+        "title": "Statutes",
+        "desc": "Featured acts & ordinances from the database"
+      },
+      "document_drafter": {
+        "title": "Legal Document Drafter",
+        "desc": "Draft legal templates quickly"
+      }
+    }
   },
   "header": {
     "nav_about": "About",
@@ -22,21 +48,15 @@
     "practice_areas": "Practice Areas",
     "practice_subtitle": "Specialized legal solutions built for the complexity of modern institutions.",
     "how_it_works_title": "How It Works",
-    "how_it_works_subtitle": "Get matched with the right counsel in three simple steps.",
-    "how_step_1_title": "Describe Your Matter",
-    "how_step_1_desc": "Tell us your jurisdiction, practice area, and key requirements.",
-    "how_step_2_title": "Review Matched Counsel",
-    "how_step_2_desc": "We surface verified lawyers based on outcomes, specialization, and availability.",
-    "how_step_3_title": "Engage Securely",
-    "how_step_3_desc": "Schedule consultations, share documents, and manage billing - all in one place.",
-    "why_title": "Why AdvokateDesk?",
-    "why_subtitle": "We deliver the trust, strategic clarity, and legal precision your organization expects.",
-    "pillar_1_title": "Vetted Excellence",
-    "pillar_1_desc": "Every listed counsel is screened through institutional due diligence and outcomes history.",
-    "pillar_2_title": "Secure Consultations",
-    "pillar_2_desc": "Encrypted communication channels and controlled workspace access for sensitive matters.",
-    "pillar_3_title": "Transparent Pricing",
-    "pillar_3_desc": "Clear fee models, scoped deliverables, and budget visibility before engagement starts.",
+    "how_it_works_subtitle": "Legal help, trusted resources, and document drafting — streamlined for Pakistan.",
+    "how_step_1_title": "Get Legal Help",
+    "how_step_1_desc": "Hire verified lawyers or consult our AI trained in Pakistani law for quick and reliable assistance.",
+    "how_step_2_title": "Explore Legal Resources",
+    "how_step_2_desc": "Access penal codes, statutes, sanctions, and legal acts in one place.",
+    "how_step_3_title": "Draft Documents",
+    "how_step_3_desc": "Easily generate legal documents such as legal notices and other formal drafts.",
+    "why_section_title": "Why AdvokateDesk?",
+    "why_section_lead": "We offer the services below. Click any card to jump to the shortcut grid in the hero.",
     "stat_retention": "Client retention rate",
     "stat_match": "Average counsel matching time",
     "stat_confidentiality": "Institution-grade confidentiality",
@@ -63,5 +83,45 @@
     "about_p1": "Legal information should not stay locked behind dense codes and jargon. We built this platform so you can understand your rights, duties, and choices in clearer language—and act with confidence when it matters.",
     "about_p2": "As Pakistanis, we all share an interest in knowing the laws of our state and nation. Those laws shape justice, accountability, and everyday life—from contracts and commerce to fundamental rights and public order. When more citizens understand the rules that govern us, fairness and democratic participation grow stronger.",
     "about_p3": "AdvokateDesk connects you with plain-language guidance, tools to explore statutes and the penal code, verified counsel when you need representation, and a workspace designed for individuals, families, and institutions navigating Pakistan's legal landscape."
+  },
+  "features": {
+    "hire_lawyer": {
+      "title": "Hire a Lawyer",
+      "subtitle": "Browse verified legal professionals from database."
+    },
+    "penal_code": {
+      "title": "Penal Code Search",
+      "subtitle": "Search and review Pakistan Penal Code sections from the database."
+    },
+    "statutes": {
+      "title": "Statutes",
+      "subtitle": "Browse acts & ordinances from the database. Use search and filters to find what you need."
+    },
+    "sanctions_checker": {
+      "title": "Sanctions Checker",
+      "subtitle": "Screen individuals and entities against the NACTA proscribed persons list under Anti Terrorism Act 1997."
+    },
+    "free_consultation": {
+      "title": "Lawyer Bot",
+      "subtitle": "Chat with our assistant for general questions on Pakistani law and the platform—informational only, not legal advice.",
+      "bot_heading": "Lawyer Bot",
+      "bot_lead": "Ask about statutes, penalties, procedures, or how to use AdvokateDesk. When your backend is configured, replies are powered by our RAG-backed virtual lawyer.",
+      "open_bot": "Open Lawyer Bot"
+    }
+  },
+  "consultation": {
+    "chat_title": "Lawyer Bot",
+    "chat_subtitle": "Pakistani-law assistant when your FastAPI service is connected",
+    "chat_back": "Back",
+    "chat_close": "Close chat",
+    "chat_empty": "Ask about laws, procedures, or platform features. Replies depend on your backend configuration.",
+    "chat_placeholder": "Type your question…",
+    "chat_send": "Send",
+    "chat_thinking": "Thinking…",
+    "chat_disclaimer": "Informational guidance only—not a substitute for advice from a qualified advocate.",
+    "chat_env_hint": "Point VITE_LEGAL_CHAT_API_URL at your FastAPI chat endpoint (see .env).",
+    "chat_not_configured_title": "Backend not configured",
+    "chat_not_configured_body": "Set VITE_LEGAL_CHAT_API_URL to your FastAPI chat URL (e.g. http://YOUR_LAPTOP_IP:8000/chat), then rebuild.",
+    "chat_error_title": "Assistant unavailable"
   }
 }

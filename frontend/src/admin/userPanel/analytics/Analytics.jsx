@@ -6,7 +6,7 @@ import UserGrowthData from "./userGrowth/UserGrowthData";
 import ActiveUsersCount from "./counters/activeUsersCount/ActiveUsersCount";
 import UsersWithAccessCount from "./counters/usersWithAccessCount/UsersWithAccessCount";
 import UsersWithoutAccessCount from "./counters/usersWithoutAccessCount/UsersWithoutAccessCount";
-import TotalDownloadsCount from "./counters/totalDownloads/TotalDownloadsCount";
+// import TotalDownloadsCount from "./counters/totalDownloads/TotalDownloadsCount";
 
 const Analytics = () => {
   const [error, setError] = useState(null);
@@ -32,8 +32,10 @@ const Analytics = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-200 flex flex-col p-10">
-        <h1 className="text-[2em] mb-10">AdvokateDesk Dashboard</h1>
+      <div className="flex flex-col bg-gray-200 p-10 text-slate-900">
+        <h1 className="mb-10 text-[2em] font-semibold text-slate-900">
+          AdvokateDesk Dashboard
+        </h1>
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           <strong>Error:</strong> {error}
         </div>
@@ -42,8 +44,10 @@ const Analytics = () => {
   }
 
   return (
-    <div className="bg-gray-200 flex flex-col p-10">
-      <h1 className="text-[2em] mb-10">AdvokateDesk Dashboard</h1>
+    <div className="flex flex-col bg-gray-200 p-10 text-slate-900">
+      <h1 className="mb-10 text-[2em] font-semibold text-slate-900">
+        AdvokateDesk Dashboard
+      </h1>
       {isLoading ? (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
@@ -56,7 +60,7 @@ const Analytics = () => {
             {renderCounter(ActiveUsersCount, "Active Users")}
             {renderCounter(UsersWithAccessCount, "Users With Access")}
             {renderCounter(UsersWithoutAccessCount, "Users Without Access")}
-            {renderCounter(TotalDownloadsCount, "Total Download Counts")}
+            {/* {renderCounter(TotalDownloadsCount, "Total Download Counts")} */}
 
             {/* <TotalProjectsCount/> */}
           </section>

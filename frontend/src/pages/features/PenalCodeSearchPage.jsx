@@ -1,5 +1,6 @@
 import FeaturePageLayout from './FeaturePageLayout'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getPenalCodes } from '../../services/penalcodeAPIs'
 import { useSiteTheme } from '../../hooks/useSiteTheme'
 
@@ -24,12 +25,17 @@ function PenalCodeDetailModal({ item, onClose }) {
       <div className={shellCls} onClick={(event) => event.stopPropagation()}>
         <div className="mb-4 flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold text-[#2563eb]">{item.chapter || 'Chapter'}</p>
+            <p className="text-xs font-semibold text-[#2563eb]">{item.chapter || 'Instrument'}</p>
             <h2 className={`mt-1 text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              PC {item.section} - {item.title || 'Untitled Section'}
+              {item.title || 'Untitled'}
             </h2>
             {item.chapterTitle && (
               <p className={`mt-1 text-sm ${isDark ? 'text-[#9ab4ce]' : 'text-slate-600'}`}>{item.chapterTitle}</p>
+            )}
+            {item.section && (
+              <p className={`mt-1 font-mono text-xs ${isDark ? 'text-[#6b8aad]' : 'text-slate-500'}`}>
+                {item.section}
+              </p>
             )}
           </div>
           <button type="button" onClick={onClose} className={closeCls}>
@@ -48,6 +54,7 @@ function PenalCodeDetailModal({ item, onClose }) {
 }
 
 function PenalCodeSearchPage() {
+  const { t } = useTranslation()
   const { isDark } = useSiteTheme()
   const [statutes, setStatutes] = useState([])
   const [search, setSearch] = useState('')
@@ -88,15 +95,15 @@ function PenalCodeSearchPage() {
 
   return (
     <FeaturePageLayout
-      title="Penal Code Search"
-      subtitle="Search and review Pakistan Penal Code sections from the database."
+      title={t('features.penal_code.title')}
+      subtitle={t('features.penal_code.subtitle')}
     >
       <div className="mb-4">
         <input
           type="text"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search by section, title, chapter, or content..."
+          placeholder="Search by title, category, reference id, or full text..."
           className={inputCls}
         />
       </div>
@@ -114,7 +121,7 @@ function PenalCodeSearchPage() {
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  PC {statute.section} - {statute.title || 'Untitled Section'}
+                  {statute.title || 'Untitled'}
                 </h2>
                 <span className={badgeCls}>
                   {statute.chapter}
@@ -130,7 +137,7 @@ function PenalCodeSearchPage() {
           ))}
 
           {!statutes.length && (
-            <p className={`text-sm ${metaMuted}`}>No penal code sections matched your search.</p>
+            <p className={`text-sm ${metaMuted}`}>No instruments matched your search.</p>
           )}
         </div>
       )}

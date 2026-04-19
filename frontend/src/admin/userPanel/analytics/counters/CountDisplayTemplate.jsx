@@ -70,16 +70,16 @@ const CountDisplayTemplate = ({
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center bg-white p-10 w-58 h-40 rounded-xl shadow-lg">
-        <div className="text-gray-500 text-sm">Loading {title.toLowerCase()}...</div>
-        <h2 className={titleClass}>{title}</h2>
+      <div className="flex h-40 w-58 flex-col justify-center rounded-xl bg-white p-10 text-slate-900 shadow-lg">
+        <div className="text-sm text-gray-500">Loading {title.toLowerCase()}...</div>
+        <h2 className={`font-semibold ${titleClass || 'text-slate-900'}`}>{title}</h2>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col justify-center bg-white p-10 w-58 h-40 rounded-xl shadow-lg">
+      <div className="flex h-40 w-58 flex-col justify-center rounded-xl bg-white p-10 text-slate-900 shadow-lg">
         <div className="text-red-600 text-sm">
           {error}
           {retryCount > 0 && retryCount <= 3 && (
@@ -88,26 +88,28 @@ const CountDisplayTemplate = ({
             </div>
           )}
         </div>
-        <h2 className={titleClass}>{title}</h2>
+        <h2 className={`font-semibold ${titleClass || 'text-slate-900'}`}>{title}</h2>
       </div>
     );
   }
   
   if (count === null) {
     return (
-      <div className="flex flex-col justify-center bg-white p-10 w-58 h-40 rounded-xl shadow-lg">
-        <div className="text-gray-500 text-sm">No data available</div>
-        <h2 className={titleClass}>{title}</h2>
+      <div className="flex h-40 w-58 flex-col justify-center rounded-xl bg-white p-10 text-slate-900 shadow-lg">
+        <div className="text-sm text-gray-500">No data available</div>
+        <h2 className={`font-semibold ${titleClass || 'text-slate-900'}`}>{title}</h2>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col justify-center bg-white p-10 w-58 h-40 rounded-xl shadow-lg">
-      <div className={`text-[50px] font-bold ${countClass}`}>
+    <div className="flex h-40 w-58 flex-col justify-center rounded-xl bg-white p-10 text-slate-900 shadow-lg">
+      <div
+        className={`text-[50px] font-bold ${countClass || 'text-slate-900'}`}
+      >
         {typeof count === 'number' ? count : '0'}
       </div>
-      <h2 className={titleClass}>{title}</h2>
+      <h2 className={`font-semibold ${titleClass || 'text-slate-900'}`}>{title}</h2>
     </div>
   );
 };

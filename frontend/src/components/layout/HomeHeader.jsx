@@ -1,11 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
   getStoredAccessToken,
   getStoredUser,
   clearStoredAccessToken,
 } from '../../utils/authTokenStorage'
+
+function scrollToHomeSection(sectionId) {
+  const el = document.getElementById(sectionId)
+  if (!el) return
+  const headerOffset = 96
+  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+}
 
 function HomeHeader() {
   const { t, i18n } = useTranslation()
@@ -19,6 +27,7 @@ function HomeHeader() {
   })
   const dropdownRef = useRef(null)
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -110,6 +119,12 @@ function HomeHeader() {
           }`}>
             <Link
               to="/home#about"
+              onClick={(e) => {
+                if (location.pathname !== '/home') return
+                e.preventDefault()
+                scrollToHomeSection('about')
+                window.history.replaceState(null, '', '/home#about')
+              }}
               className={theme === 'dark' ? 'whitespace-nowrap hover:text-white transition-colors' : 'whitespace-nowrap hover:text-slate-900 transition-colors'}
             >
               {t('header.nav_about')}
@@ -122,6 +137,12 @@ function HomeHeader() {
             </Link>
             <Link
               to="/home#faq"
+              onClick={(e) => {
+                if (location.pathname !== '/home') return
+                e.preventDefault()
+                scrollToHomeSection('faq')
+                window.history.replaceState(null, '', '/home#faq')
+              }}
               className={theme === 'dark' ? 'whitespace-nowrap hover:text-white transition-colors' : 'whitespace-nowrap hover:text-slate-900 transition-colors'}
             >
               {t('header.nav_faq')}

@@ -3,74 +3,69 @@ import { animate, splitText, stagger } from 'animejs'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
+/** i18n keys under `hero.cards.<id>.title` / `.desc` */
 const features = [
   {
+    id: 'hire_lawyer',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
       </svg>
     ),
-    label: 'Hire a Lawyer',
-    desc: 'Connect with vetted counsel in 24h',
     path: '/features/hire-lawyer',
   },
   {
+    id: 'lawyer_bot',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
       </svg>
     ),
-    label: 'Free Consultation',
-    desc: 'Initial advice at no cost',
     path: '/features/free-consultation',
   },
   {
+    id: 'penal_code',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.966 8.966 0 0 0-6 2.292m0-14.25v14.25" />
       </svg>
     ),
-    label: 'Penal Code Search',
-    desc: 'Browse statutes & case law',
     path: '/features/penal-code-search',
   },
   {
+    id: 'sanctions_checker',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
       </svg>
     ),
-    label: 'Sanctions Checker',
-    desc: 'Screen parties & entities',
     path: '/features/sanctions-checker',
   },
   {
+    id: 'statutes',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
       </svg>
     ),
-    label: 'Statutes',
-    desc: 'Featured acts & ordinances from the database',
     path: '/features/statutes',
   },
   {
+    id: 'document_drafter',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375H8.25m8.25 6h-9m12.75 6H3.75m15.75-9h-15m11.25-7.5H8.25A2.25 2.25 0 0 0 6 6v12a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 18V6a2.25 2.25 0 0 0-2.25-2.25Z" />
       </svg>
     ),
-    label: 'Legal Document Drafter',
-    desc: 'Draft legal templates quickly',
     path: '/features/document-drafter',
   },
 ]
 
-const stats = [
-  { value: '1,150+', label: 'Verified Specialists' },
-  { value: '4,320+', label: 'Active Matters' },
-  { value: '98%', label: 'Client Retention' },
-]
+// const stats = [
+//   { value: '1,150+', label: 'Verified Specialists' },
+//   { value: '4,320+', label: 'Active Matters' },
+//   { value: '98%', label: 'Client Retention' },
+// ]
 
 function HeroHome({ contentShell, theme = 'dark' }) {
   const { t, i18n } = useTranslation()
@@ -141,6 +136,7 @@ function HeroHome({ contentShell, theme = 'dark' }) {
 
   return (
     <section
+      id="hero"
       className={`relative w-full overflow-hidden min-h-screen flex flex-col transition-colors ${
         isDark ? 'bg-[#020c1b]' : 'bg-slate-50'
       }`}
@@ -229,11 +225,14 @@ function HeroHome({ contentShell, theme = 'dark' }) {
           </button>
         </div> */}
 
-        {/* Feature cards */}
-        <div className="hero-fade mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {/* Feature cards — anchor for “Why AdvokateDesk” section scroll target */}
+        <div
+          id="hero-feature-cards"
+          className="hero-fade mt-14 scroll-mt-24 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6"
+        >
           {features.map((f) => (
             <Link
-              key={f.label}
+              key={f.path}
               to={f.path}
               className={`feat-card group cursor-pointer rounded-2xl border p-4 backdrop-blur-sm transition-all ${
                 isDark
@@ -244,14 +243,18 @@ function HeroHome({ contentShell, theme = 'dark' }) {
               <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#0f3460] text-[#60a5fa] group-hover:bg-[#1d4ed8] group-hover:text-white transition-colors">
                 {f.icon}
               </div>
-              <p className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{f.label}</p>
-              <p className={`mt-1 text-xs ${isDark ? 'text-[#5a7fa0]' : 'text-slate-600'}`}>{f.desc}</p>
+              <p className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                {t(`hero.cards.${f.id}.title`)}
+              </p>
+              <p className={`mt-1 text-xs ${isDark ? 'text-[#5a7fa0]' : 'text-slate-600'}`}>
+                {t(`hero.cards.${f.id}.desc`)}
+              </p>
             </Link>
           ))}
         </div>
 
         {/* Stats */}
-        <div className="hero-fade mt-12 flex flex-wrap gap-8">
+        {/* <div className="hero-fade mt-12 flex flex-wrap gap-8">
           {stats.map((s, i) => (
             <div key={s.label} className="stat-item flex items-center gap-3">
               {i > 0 && <div className="h-8 w-px bg-[#1e3a5f]" />}
@@ -261,7 +264,7 @@ function HeroHome({ contentShell, theme = 'dark' }) {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
 
       </div>
     </section>

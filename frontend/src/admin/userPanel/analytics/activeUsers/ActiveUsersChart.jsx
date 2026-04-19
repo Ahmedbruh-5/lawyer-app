@@ -10,8 +10,8 @@ const ActiveUsersChart = ({ data }) => {
   const latestCount = lastIndex >= 0 ? counts[lastIndex] : 0;
 
   return (
-    <div className="rounded-lg border border-slate-200 p-4">
-      <h3 className="mb-3 text-base font-semibold">Active Users Overview</h3>
+    <div className="rounded-lg border border-slate-200 p-4 text-slate-900">
+      <h3 className="mb-3 text-base font-semibold text-slate-900">Active Users Overview</h3>
       <div className="mb-3 text-sm text-slate-600">
         Latest Active Users: <span className="font-semibold text-slate-900">{latestCount}</span>
       </div>
@@ -19,15 +19,15 @@ const ActiveUsersChart = ({ data }) => {
         <table className="w-full text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="px-3 py-2 text-left">Date</th>
-              <th className="px-3 py-2 text-left">Active Users</th>
+              <th className="px-3 py-2 text-left text-slate-900">Date</th>
+              <th className="px-3 py-2 text-left text-slate-900">Active Users</th>
             </tr>
           </thead>
           <tbody>
             {data.slice(-20).map((item) => (
               <tr key={item._id} className="border-t border-slate-100">
-                <td className="px-3 py-2">{item._id}</td>
-                <td className="px-3 py-2">{item.count}</td>
+                <td className="px-3 py-2 text-slate-800">{item._id}</td>
+                <td className="px-3 py-2 text-slate-800">{item.count}</td>
               </tr>
             ))}
           </tbody>

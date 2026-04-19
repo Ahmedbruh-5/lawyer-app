@@ -1,0 +1,58 @@
+# =============================================================================
+# AI Lawyer - RAG pipeline dependencies
+# -----------------------------------------------------------------------------
+# Tested with Python 3.11 / 3.12 / 3.13 / 3.14 on Windows 10.
+# If installation of torch fails on your Python version, create a venv with
+# Python 3.11 (the safest), e.g.:
+#     py -3.11 -m venv .venv
+#     .venv\Scripts\activate
+#     pip install -r requirements.txt
+# =============================================================================
+
+# --- LangChain core + integrations -------------------------------------------
+langchain-core>=1.0,<2.0
+langchain-huggingface>=1.2,<2.0
+langchain-community>=0.4,<1.0
+langchain-classic>=1.0,<2.0
+
+# --- Vector store -------------------------------------------------------------
+# Pin below 1.11: newer releases may be sdist-only on older macOS/x86_64 (needs SWIG to build).
+faiss-cpu>=1.9.0,<1.11
+
+# --- Embedding backbone -------------------------------------------------------
+# sentence-transformers pulls torch + huggingface_hub + transformers.
+# Pin transformers/sentence-transformers below 5 / 4: transformers 5.x expects torch>=2.4;
+# on older macOS x86_64 PyPI often only has torch 2.2.x, which triggers "PyTorch disabled" and
+# can crash (e.g. NameError: nn in transformers.integrations.accelerate).
+sentence-transformers>=3.0.0,<4.0.0
+transformers>=4.44,<5.0
+huggingface-hub>=0.33.4
+# torch is a transitive dependency of sentence-transformers.
+# Use 2.9+ when available (e.g. Python 3.14); older macOS/x86_64 indices may only ship 2.2.x.
+torch>=2.2.0
+
+# --- PDF extraction (ad_law_files / one-off imports) -------------------------
+pypdf>=5.0
+# Optional second-pass extractor when pypdf returns empty (uncomment if needed):
+# pymupdf>=1.24.0
+
+# --- Utilities ----------------------------------------------------------------
+tqdm>=4.66
+numpy>=1.26.2,<2.0
+python-dotenv>=1.0.1
+
+# --- HTTP microservice (for MERN integration) --------------------------------
+fastapi>=0.115
+uvicorn[standard]>=0.30
+
+# --- LLM backend (Gemini, free tier) -----------------------------------------
+# Default backend. Set GOOGLE_API_KEY in .env to enable answer generation.
+# Get a free key at https://aistudio.google.com/app/apikey
+langchain-google-genai>=2.0
+
+# --- OPTIONAL: alternative LLM backends --------------------------------------
+# Uncomment whichever you additionally want to try.
+#
+# langchain-openai>=0.2    # OpenAI / Azure OpenAI   (needs OPENAI_API_KEY)
+# langchain-ollama>=0.2    # local Ollama server      (free, offline)
+# langchain-anthropic>=0.2 # Anthropic Claude         (needs ANTHROPIC_API_KEY)

@@ -559,20 +559,20 @@ const UserPanel = () => {
 
   if (loading)
     return (
-      <div style={{ padding: "20px" }}>
+      <div className="admin-root text-slate-900" style={{ padding: "20px" }}>
         <Typography>Loading users...</Typography>
       </div>
     );
   if (error)
     return (
-      <div style={{ padding: "20px" }}>
+      <div className="admin-root text-slate-900" style={{ padding: "20px" }}>
         <Typography color="error">Error: {error}</Typography>
       </div>
     );
 
   if (users.length === 0) {
     return (
-      <div style={{ padding: "20px" }}>
+      <div className="admin-root text-slate-900" style={{ padding: "20px" }}>
         <Typography variant="h5">Admin Panel</Typography>
         <Typography>No users found.</Typography>
         <Button onClick={handleAdd}>Add User</Button>
@@ -581,7 +581,7 @@ const UserPanel = () => {
   }
 
   return (
-    <Box className="admin-table-container">
+    <Box className="admin-root admin-table-container">
       <Grid container direction="column" spacing={2}>
         <Grid item>
           <Box className="admin-header">

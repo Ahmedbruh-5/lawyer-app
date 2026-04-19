@@ -33,6 +33,17 @@ html[data-theme="dark"] body {
   color: #f1f5f9;
 }
 
+/* Admin UI stays light; site dark theme used to set light text on body, which inherited into
+   white/gray panels and made copy illegible. When an admin shell is mounted, reset body palette. */
+.admin-root {
+  color: #0f172a;
+}
+
+html[data-theme="dark"] body:has(.admin-root) {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
 html:not([data-theme]) body {
   background-color: #e9eaf0;
   color: var(--text-main);

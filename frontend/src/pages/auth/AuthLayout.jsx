@@ -10,6 +10,7 @@ function AuthLayout({
   switchTo,
   backgroundImage,
   formSide = "left",
+  onFooterSwitch,
 }) {
   const navigate = useNavigate();
   const [isSwitching, setIsSwitching] = useState(false);
@@ -23,7 +24,11 @@ function AuthLayout({
     if (isSwitching) return;
     setIsSwitching(true);
     window.setTimeout(() => {
-      navigate(switchTo);
+      if (typeof onFooterSwitch === "function") {
+        onFooterSwitch();
+      } else {
+        navigate(switchTo, { replace: true });
+      }
     }, 230);
   };
 

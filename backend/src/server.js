@@ -7,11 +7,16 @@ const penalCodeRoutes = require('./routes/penalCodeRoutes');
 const statuteRoutes = require('./routes/statuteRoutes')
 const sanctionRoutes = require('./routes/sanctionRoutes')
 const lawyerRoutes = require('./routes/lawyerRoutes')
+const legalChatRoutes = require('./routes/legalChatRoutes')
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173,http://localhost:5174')
+const allowedOrigins = (
+  process.env.CORS_ORIGIN ||
+  process.env.CORS_ALLOWED_ORIGINS ||
+  'http://localhost:5173,http://localhost:5174'
+)
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
@@ -33,6 +38,8 @@ app.use('/api/penal-codes', penalCodeRoutes);
 app.use('/api/statutes', statuteRoutes);
 app.use('/api/sanctions', sanctionRoutes);
 app.use('/api/lawyers', lawyerRoutes);
+/** Proxies to Python AI Lawyer RAG (see src/AI Lawyer/). Env: RAG_SERVICE_URL, RAG_API_KEY */
+app.use('/api/legal-chat', legalChatRoutes);
 app.get('/', (req, res) => {
   res.json({ message: 'Advokate Desk API is running' });
 });
