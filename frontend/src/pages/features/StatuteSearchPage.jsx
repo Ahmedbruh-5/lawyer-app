@@ -2,17 +2,19 @@ import FeaturePageLayout from './FeaturePageLayout'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getStatutes, getStatuteById, getStatuteFiltersMeta } from '../../services/statuteAPIs'
+import { useDebounce } from '../../hooks/useDebounce'
 import { useSiteTheme } from '../../hooks/useSiteTheme'
 
 function StatuteSearchPage() {
   const { t } = useTranslation()
   const { isDark } = useSiteTheme()
   const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(search, 320)
   const [type, setType] = useState('')
   const [year, setYear] = useState('')
 
   const [statutes, setStatutes] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isFetching, setIsFetching] = useState(true)
   const [error, setError] = useState('')
 
   const [typesMeta, setTypesMeta] = useState([])
@@ -45,32 +47,38 @@ function StatuteSearchPage() {
   }, [fetchMeta])
 
   useEffect(() => {
-    let cancelled = false
+    const ac = new AbortController()
+    let active = true
+
     const run = async () => {
       try {
-        setIsLoading(true)
+        setIsFetching(true)
         setError('')
         const data = await getStatutes({
-          search,
+          search: debouncedSearch,
           type,
           year,
           page: 1,
           limit: 20,
           includeText: true,
+          signal: ac.signal,
         })
-        if (!cancelled) setStatutes(data.statutes || [])
+        if (!active) return
+        setStatutes(data.statutes || [])
       } catch (e) {
-        if (!cancelled) setError(e.message || 'Failed to load statutes')
+        if (!active || e?.code === 'ERR_CANCELED') return
+        setError(e.message || 'Failed to load statutes')
       } finally {
-        if (!cancelled) setIsLoading(false)
+        if (active) setIsFetching(false)
       }
     }
 
     run()
     return () => {
-      cancelled = true
+      active = false
+      ac.abort()
     }
-  }, [search, type, year])
+  }, [debouncedSearch, type, year])
 
   const openStatuteDetail = async (id) => {
     try {
@@ -112,9 +120,9 @@ function StatuteSearchPage() {
           className={inputCls}
         >
           <option value="">All Types</option>
-          {typesMeta.map((t) => (
-            <option key={t} value={t} className="text-black">
-              {t}
+          {typesMeta.map((typeName) => (
+            <option key={typeName} value={typeName} className="text-black">
+              {typeName}
             </option>
           ))}
         </select>
@@ -133,11 +141,34 @@ function StatuteSearchPage() {
         </select>
       </div>
 
-      {isLoading && <p className={`text-sm ${metaMuted}`}>Loading statutes...</p>}
-      {!isLoading && error && <p className="text-sm text-red-500">{error}</p>}
+      {isFetching && !statutes.length && !error && (
+        <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 py-8" role="status" aria-live="polite">
+          <div
+            className={`h-12 w-12 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+              isDark ? 'border-[#1e3a5f] border-t-[#60a5fa]' : 'border-slate-200 border-t-blue-600'
+            }`}
+          />
+          <p className={`text-sm ${metaMuted}`}>Loading statutes…</p>
+        </div>
+      )}
+      {isFetching && statutes.length > 0 && (
+        <div className={`mb-3 flex items-center gap-2 text-xs ${metaMuted}`} role="status" aria-live="polite">
+          <div
+            className={`h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+              isDark ? 'border-[#1e3a5f] border-t-[#60a5fa]' : 'border-slate-200 border-t-blue-600'
+            }`}
+          />
+          <span>Updating results…</span>
+        </div>
+      )}
+      {error && <p className="text-sm text-red-500">{error}</p>}
 
-      {!isLoading && !error && (
-        <div className="space-y-3">
+      {!error && (
+        <div
+          className={`space-y-3 transition-opacity duration-200 ${
+            isFetching && statutes.length > 0 ? 'opacity-75' : 'opacity-100'
+          }`}
+        >
           {statutes.map((s) => {
             const preview = s.text ? s.text.replace(/\s+/g, ' ').trim().slice(0, 220) : ''
             return (
@@ -167,7 +198,7 @@ function StatuteSearchPage() {
             )
           })}
 
-          {!statutes.length && (
+          {!isFetching && !statutes.length && (
             <p className={`text-sm ${metaMuted}`}>No statutes matched your search.</p>
           )}
         </div>
@@ -208,7 +239,16 @@ function StatuteSearchPage() {
         </div>
       )}
 
-      {detailLoading && <p className={`mt-3 text-sm ${metaMuted}`}>Loading full statute...</p>}
+      {detailLoading && (
+        <div className={`mt-4 flex items-center justify-center gap-3 py-6 ${metaMuted}`} role="status" aria-live="polite">
+          <div
+            className={`h-9 w-9 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+              isDark ? 'border-[#1e3a5f] border-t-[#60a5fa]' : 'border-slate-200 border-t-blue-600'
+            }`}
+          />
+          <span className="text-sm">Loading full statute…</span>
+        </div>
+      )}
     </FeaturePageLayout>
   )
 }

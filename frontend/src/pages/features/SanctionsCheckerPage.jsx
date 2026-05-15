@@ -221,12 +221,13 @@ function SanctionsCheckerPage() {
       </div>
 
       {isLoading && (
-        <div className={`mb-4 flex items-center gap-2 text-sm ${metaMuted}`}>
-          <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-          </svg>
-          Loading sanctions...
+        <div className="mb-6 flex min-h-[28vh] flex-col items-center justify-center gap-4 py-8" role="status" aria-live="polite">
+          <div
+            className={`h-12 w-12 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+              isDark ? 'border-[#1e3a5f] border-t-[#60a5fa]' : 'border-slate-200 border-t-blue-600'
+            }`}
+          />
+          <p className={`text-sm ${metaMuted}`}>Loading sanctions…</p>
         </div>
       )}
       {!isLoading && error && <p className="mb-4 text-sm text-red-500">{error}</p>}

@@ -69,7 +69,18 @@ function HireLawyerPage() {
       </div>
 
       {isLoading && (
-        <p className={`mb-3 text-sm ${isDark ? 'text-[#9ab4ce]' : 'text-slate-600'}`}>Loading lawyers...</p>
+        <div
+          className="mb-6 flex min-h-[24vh] flex-col items-center justify-center gap-4 py-8"
+          role="status"
+          aria-live="polite"
+        >
+          <div
+            className={`h-12 w-12 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+              isDark ? 'border-[#1e3a5f] border-t-[#60a5fa]' : 'border-slate-200 border-t-blue-600'
+            }`}
+          />
+          <p className={`text-sm ${isDark ? 'text-[#9ab4ce]' : 'text-slate-600'}`}>Loading lawyers…</p>
+        </div>
       )}
       {!!error && <p className="mb-3 text-sm text-red-500">{error}</p>}
 

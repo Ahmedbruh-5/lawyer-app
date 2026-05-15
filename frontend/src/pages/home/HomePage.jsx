@@ -299,9 +299,20 @@ function HomePage() {
             {t("home.featured_title")}
           </h2>
           {lawyersLoading && (
-            <p className={`mt-6 text-sm ${isDark ? "text-[#9ab4ce]" : "text-slate-600"}`}>
-              {t("home.lawyers_loading", "Loading featured counsel...")}
-            </p>
+            <div
+              className="mt-8 flex min-h-[12rem] flex-col items-center justify-center gap-4 py-6"
+              role="status"
+              aria-live="polite"
+            >
+              <div
+                className={`h-12 w-12 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+                  isDark ? "border-[#1e3a5f] border-t-[#60a5fa]" : "border-slate-200 border-t-blue-600"
+                }`}
+              />
+              <p className={`text-sm ${isDark ? "text-[#9ab4ce]" : "text-slate-600"}`}>
+                {t("home.lawyers_loading", "Loading featured counsel...")}
+              </p>
+            </div>
           )}
           {!!lawyersError && (
             <p className="mt-6 text-sm text-red-400" role="alert">

@@ -7,6 +7,7 @@ export const getStatutes = async ({
   page = 1,
   limit = 4,
   includeText = true,
+  signal,
 } = {}) => {
   const { data } = await apiClient.get('/api/statutes', {
     params: {
@@ -17,6 +18,7 @@ export const getStatutes = async ({
       limit,
       includeText,
     },
+    signal,
   })
 
   return data

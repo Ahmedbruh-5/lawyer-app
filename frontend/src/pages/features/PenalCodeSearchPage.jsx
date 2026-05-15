@@ -2,6 +2,7 @@ import FeaturePageLayout from './FeaturePageLayout'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getPenalCodes } from '../../services/penalcodeAPIs'
+import { useDebounce } from '../../hooks/useDebounce'
 import { useSiteTheme } from '../../hooks/useSiteTheme'
 
 function PenalCodeDetailModal({ item, onClose }) {
@@ -58,7 +59,8 @@ function PenalCodeSearchPage() {
   const { isDark } = useSiteTheme()
   const [statutes, setStatutes] = useState([])
   const [search, setSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const debouncedSearch = useDebounce(search, 320)
+  const [isFetching, setIsFetching] = useState(true)
   const [error, setError] = useState('')
   const [selectedStatute, setSelectedStatute] = useState(null)
 
@@ -75,21 +77,34 @@ function PenalCodeSearchPage() {
     : 'rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs text-slate-600'
 
   useEffect(() => {
-    const fetchPenalCodes = async () => {
+    const ac = new AbortController()
+    let active = true
+
+    const run = async () => {
+      setIsFetching(true)
+      setError('')
       try {
-        setIsLoading(true)
-        setError('')
-        const data = await getPenalCodes({ q: search, limit: 200 })
+        const data = await getPenalCodes({
+          q: debouncedSearch,
+          limit: 200,
+          signal: ac.signal,
+        })
+        if (!active) return
         setStatutes(data.data || [])
       } catch (err) {
+        if (!active || err?.code === 'ERR_CANCELED') return
         setError(err.response?.data?.message || 'Failed to load penal codes')
       } finally {
-        setIsLoading(false)
+        if (active) setIsFetching(false)
       }
     }
 
-    fetchPenalCodes()
-  }, [search])
+    run()
+    return () => {
+      active = false
+      ac.abort()
+    }
+  }, [debouncedSearch])
 
   const metaMuted = isDark ? 'text-[#9ab4ce]' : 'text-slate-600'
 
@@ -108,11 +123,34 @@ function PenalCodeSearchPage() {
         />
       </div>
 
-      {isLoading && <p className={`text-sm ${metaMuted}`}>Loading penal codes...</p>}
-      {!isLoading && error && <p className="text-sm text-red-500">{error}</p>}
+      {isFetching && !statutes.length && !error && (
+        <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 py-8" role="status" aria-live="polite">
+          <div
+            className={`h-12 w-12 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+              isDark ? 'border-[#1e3a5f] border-t-[#60a5fa]' : 'border-slate-200 border-t-blue-600'
+            }`}
+          />
+          <p className={`text-sm ${metaMuted}`}>Loading penal codes…</p>
+        </div>
+      )}
+      {isFetching && statutes.length > 0 && (
+        <div className={`mb-3 flex items-center gap-2 text-xs ${metaMuted}`} role="status" aria-live="polite">
+          <div
+            className={`h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+              isDark ? 'border-[#1e3a5f] border-t-[#60a5fa]' : 'border-slate-200 border-t-blue-600'
+            }`}
+          />
+          <span>Updating results…</span>
+        </div>
+      )}
+      {error && <p className="text-sm text-red-500">{error}</p>}
 
-      {!isLoading && !error && (
-        <div className="space-y-3">
+      {!error && (
+        <div
+          className={`space-y-3 transition-opacity duration-200 ${
+            isFetching && statutes.length > 0 ? 'opacity-75' : 'opacity-100'
+          }`}
+        >
           {statutes.map((statute) => (
             <article
               key={statute._id}
@@ -136,7 +174,7 @@ function PenalCodeSearchPage() {
             </article>
           ))}
 
-          {!statutes.length && (
+          {!isFetching && !statutes.length && (
             <p className={`text-sm ${metaMuted}`}>No instruments matched your search.</p>
           )}
         </div>

@@ -7,6 +7,8 @@ const router = express.Router();
 router.post('/signup', userController.signupUser);
 router.post('/verify-signup', userController.verifySignupUser);
 router.post('/resend-signup-otp', userController.resendSignupOtp);
+router.post('/request-password-reset', userController.requestPasswordReset);
+router.post('/reset-password', userController.resetPassword);
 router.post('/login', userController.loginUser);
 
 router.get('/verifyAdmin', authenticateUser, userController.verifyAdminStatus);

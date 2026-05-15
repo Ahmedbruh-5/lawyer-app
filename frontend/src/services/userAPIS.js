@@ -15,6 +15,16 @@ export const resendSignupOtp = async (payload) => {
   return data
 }
 
+export const requestPasswordReset = async (payload) => {
+  const { data } = await apiClient.post('/api/users/request-password-reset', payload)
+  return data
+}
+
+export const resetPassword = async (payload) => {
+  const { data } = await apiClient.post('/api/users/reset-password', payload)
+  return data
+}
+
 export const loginUser = async (payload) => {
   const { data } = await apiClient.post('/api/users/login', payload)
   return data

@@ -1,6 +1,6 @@
 import AuthLayout from './AuthLayout'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { loginUser } from '../../services/userAPIS'
 
 import { setStoredAccessToken, pickTokenFromLoginResponse, setStoredUser } from '../../utils/authTokenStorage'
@@ -84,13 +84,12 @@ function LoginPage() {
           {isSubmitting ? 'Logging in...' : 'Login'}
         </button>
 
-        <a
-          href="/"
+        <Link
+          to="/forgot-password"
           className="mt-2 text-center text-sm text-slate-600 hover:text-slate-800"
-          onClick={(event) => event.preventDefault()}
         >
           Forgot password
-        </a>
+        </Link>
       </form>
     </AuthLayout>
   )

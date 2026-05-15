@@ -122,6 +122,70 @@ async function sendSignupOtpEmail(to, otp, fullName) {
   }
 }
 
+/**
+ * Sends password reset OTP via Gmail SMTP.
+ */
+async function sendPasswordResetOtpEmail(to, otp, fullName) {
+  const safeName = (fullName || 'there').trim() || 'there';
+
+  const mail = {
+    from: SMTP_FROM,
+    to,
+    subject: 'Reset your AdvokateDesk password',
+    text: [
+      `Hi ${safeName},`,
+      '',
+      `Your password reset code is: ${otp}`,
+      '',
+      'This code expires in 15 minutes.',
+      '',
+      'If you did not request a password reset, you can ignore this email.',
+      '',
+      '- AdvokateDesk',
+    ].join('\n'),
+    html: `
+      <p>Hi ${escapeHtml(safeName)},</p>
+      <p>Your password reset code is:</p>
+      <p style="font-size:28px;font-weight:bold;letter-spacing:4px;margin:16px 0;">${escapeHtml(otp)}</p>
+      <p style="color:#64748b;font-size:14px;">This code expires in 15 minutes.</p>
+      <p style="color:#64748b;font-size:14px;">If you did not request a password reset, you can ignore this email.</p>
+      <p>- AdvokateDesk</p>
+    `,
+  };
+
+  const transport = getTransporter();
+
+  if (!transport) {
+    console.warn(`[email] Password reset OTP for ${to}: ${otp}`);
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        'Email delivery is not configured. Set SMTP_PASS (Gmail App Password) on the server.'
+      );
+    }
+    return;
+  }
+
+  try {
+    await transport.sendMail(mail);
+  } catch (err) {
+    resetTransporter();
+    console.error('[email] sendMail failed:', err.message);
+    const msg = String(err.message || '');
+    if (
+      msg.includes('534') ||
+      msg.includes('535') ||
+      msg.includes('BadCredentials')
+    ) {
+      throw new Error(
+        'Gmail rejected the login. Create a 16-character App Password at https://myaccount.google.com/apppasswords ' +
+          '(select Mail + your device). Put that in SMTP_PASS - not your normal Gmail password. ' +
+          `SMTP_USER must be ${SMTP_USER}.`
+      );
+    }
+    throw err;
+  }
+}
+
 function escapeHtml(s) {
   return String(s)
     .replace(/&/g, '&amp;')
@@ -132,6 +196,7 @@ function escapeHtml(s) {
 
 module.exports = {
   sendSignupOtpEmail,
+  sendPasswordResetOtpEmail,
   getTransporter,
   resetTransporter,
 };

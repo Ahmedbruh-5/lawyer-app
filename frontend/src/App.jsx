@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import LoginPage from './pages/auth/LoginPage'
 import SignupPage from './pages/auth/SignupPage'
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage'
 import HomePage from './pages/home/HomePage'
 import HireLawyerPage from './pages/features/HireLawyerPage'
 import FreeConsultationPage from './pages/features/FreeConsultationPage'
@@ -22,6 +23,7 @@ function App() {
       <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/features/hire-lawyer" element={<HireLawyerPage />} />
       <Route path="/features/free-consultation" element={<FreeConsultationPage />} />
       <Route path="/features/penal-code-search" element={<PenalCodeSearchPage />} />
