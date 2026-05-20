@@ -13,7 +13,7 @@ const docTypes = {
       desc: 'Sworn written statement of facts',
       fields: [
         { key: 'deponentName', label: 'Deponent full name', placeholder: 'e.g. Muhammad Ali Khan' },
-        { key: 'deponentCnic', label: 'CNIC / ID number', placeholder: 'e.g. 35202-1234567-1' },
+        { key: 'deponentCnic', label: 'CNIC / ID number', placeholder: '13-digit CNIC (e.g. 3520212345671)', type: 'cnic' },
         { key: 'address', label: 'Residential address', placeholder: 'Full address' },
         { key: 'facts', label: 'Facts to be affirmed', placeholder: 'Describe the facts...', type: 'textarea' },
         { key: 'purpose', label: 'Purpose of affidavit', placeholder: 'e.g. For submission to NADRA' },
@@ -40,9 +40,9 @@ const docTypes = {
       desc: 'Authorise someone to act for you',
       fields: [
         { key: 'principalName', label: 'Principal name', placeholder: 'Your full name' },
-        { key: 'principalCnic', label: 'Principal CNIC', placeholder: '35202-xxxxxxx-x' },
+        { key: 'principalCnic', label: 'Principal CNIC', placeholder: '13-digit CNIC (e.g. 3520212345671)', type: 'cnic' },
         { key: 'attorneyName', label: 'Attorney (agent) name', placeholder: 'Name of person you authorise' },
-        { key: 'attorneyCnic', label: 'Attorney CNIC', placeholder: '35202-xxxxxxx-x' },
+        { key: 'attorneyCnic', label: 'Attorney CNIC', placeholder: '13-digit CNIC (e.g. 3520212345671)', type: 'cnic' },
         { key: 'powers', label: 'Powers being granted', placeholder: 'e.g. Manage property...', type: 'textarea' },
         { key: 'scope', label: 'Scope / limitations', placeholder: 'e.g. Limited to property at XYZ address' },
       ],
@@ -56,7 +56,7 @@ const docTypes = {
       desc: 'حقائق پر مبنی حلفیہ بیان',
       fields: [
         { key: 'deponentName', label: 'حلف دینے والے کا مکمل نام', placeholder: 'مثلاً محمد علی خان' },
-        { key: 'deponentCnic', label: 'شناختی کارڈ نمبر', placeholder: 'مثلاً 35202-1234567-1' },
+        { key: 'deponentCnic', label: 'شناختی کارڈ نمبر', placeholder: '13 ہندسوں کا شناختی کارڈ نمبر (مثلاً 3520212345671)', type: 'cnic' },
         { key: 'address', label: 'رہائشی پتہ', placeholder: 'مکمل پتہ' },
         { key: 'facts', label: 'تصدیق شدہ حقائق', placeholder: 'حقائق لکھیں...', type: 'textarea' },
         { key: 'purpose', label: 'حلف نامہ کا مقصد', placeholder: 'مثلاً نادرا میں جمع کروانے کے لیے' },
@@ -83,9 +83,9 @@ const docTypes = {
       desc: 'کسی کو اپنے behalf پر اختیار دیں',
       fields: [
         { key: 'principalName', label: 'پرنسپل (اختیار دینے والا) کا نام', placeholder: 'آپ کا مکمل نام' },
-        { key: 'principalCnic', label: 'پرنسپل کا شناختی کارڈ نمبر', placeholder: '35202-xxxxxxx-x' },
+        { key: 'principalCnic', label: 'پرنسپل کا شناختی کارڈ نمبر', placeholder: '13 ہندسوں کا شناختی کارڈ نمبر (مثلاً 3520212345671)', type: 'cnic' },
         { key: 'attorneyName', label: 'اٹارنی (نمائندہ) کا نام', placeholder: 'جسے اختیار دے رہے ہیں' },
-        { key: 'attorneyCnic', label: 'اٹارنی کا شناختی کارڈ نمبر', placeholder: '35202-xxxxxxx-x' },
+        { key: 'attorneyCnic', label: 'اٹارنی کا شناختی کارڈ نمبر', placeholder: '13 ہندسوں کا شناختی کارڈ نمبر (مثلاً 3520212345671)', type: 'cnic' },
         { key: 'powers', label: 'دیے جانے والے اختیارات', placeholder: 'مثلاً جائیداد کا انتظام...', type: 'textarea' },
         { key: 'scope', label: 'حدود / پابندیاں', placeholder: 'مثلاً صرف XYZ جائیداد تک محدود' },
       ],
@@ -260,7 +260,12 @@ function DocumentDrafterPage() {
 
   const canGenerate = useMemo(() => {
     if (!currentDoc) return false
-    return currentDoc.fields.every((f) => (formData[f.key] || '').trim())
+    return currentDoc.fields.every((f) => {
+      const value = (formData[f.key] || '').trim()
+      if (!value) return false
+      if (f.type === 'cnic') return /^\d{13}$/.test(value)
+      return true
+    })
   }, [currentDoc, formData])
 
   const reset = () => {
@@ -419,35 +424,58 @@ function DocumentDrafterPage() {
             {currentDoc.icon} {currentDoc.name}
           </h2>
           <div className="space-y-3">
-            {currentDoc.fields.map((field) => (
-              <div key={field.key} className="space-y-1">
-                <label className={`text-sm ${isDark ? 'text-[#9ab4ce]' : 'text-slate-700'}`}>{field.label}</label>
-                {field.type === 'textarea' ? (
-                  <textarea
-                    rows={3}
-                    value={formData[field.key] || ''}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, [field.key]: e.target.value }))}
-                    placeholder={field.placeholder}
-                    className={
-                      isDark
-                        ? 'w-full rounded-lg border border-[#1e3a5f] bg-[#0b2038] px-3 py-2 text-sm text-white outline-none focus:border-[#3b82f6]'
-                        : 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#3b82f6]'
-                    }
-                  />
-                ) : (
-                  <input
-                    value={formData[field.key] || ''}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, [field.key]: e.target.value }))}
-                    placeholder={field.placeholder}
-                    className={
-                      isDark
-                        ? 'w-full rounded-lg border border-[#1e3a5f] bg-[#0b2038] px-3 py-2 text-sm text-white outline-none focus:border-[#3b82f6]'
-                        : 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#3b82f6]'
-                    }
-                  />
-                )}
-              </div>
-            ))}
+            {currentDoc.fields.map((field) => {
+              const value = formData[field.key] || ''
+              const isCnic = field.type === 'cnic'
+              const cnicInvalid = isCnic && value.length > 0 && value.length !== 13
+              return (
+                <div key={field.key} className="space-y-1">
+                  <label className={`text-sm ${isDark ? 'text-[#9ab4ce]' : 'text-slate-700'}`}>{field.label}</label>
+                  {field.type === 'textarea' ? (
+                    <textarea
+                      rows={3}
+                      value={value}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, [field.key]: e.target.value }))}
+                      placeholder={field.placeholder}
+                      className={
+                        isDark
+                          ? 'w-full rounded-lg border border-[#1e3a5f] bg-[#0b2038] px-3 py-2 text-sm text-white outline-none focus:border-[#3b82f6]'
+                          : 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#3b82f6]'
+                      }
+                    />
+                  ) : (
+                    <input
+                      value={value}
+                      inputMode={isCnic ? 'numeric' : undefined}
+                      maxLength={isCnic ? 13 : undefined}
+                      onChange={(e) => {
+                        const next = isCnic
+                          ? e.target.value.replace(/\D/g, '').slice(0, 13)
+                          : e.target.value
+                        setFormData((prev) => ({ ...prev, [field.key]: next }))
+                      }}
+                      placeholder={field.placeholder}
+                      className={`w-full rounded-lg border px-3 py-2 text-sm outline-none ${
+                        cnicInvalid
+                          ? isDark
+                            ? 'border-red-500 bg-[#0b2038] text-white focus:border-red-500'
+                            : 'border-red-500 bg-white text-slate-900 focus:border-red-500'
+                          : isDark
+                            ? 'border-[#1e3a5f] bg-[#0b2038] text-white focus:border-[#3b82f6]'
+                            : 'border-slate-300 bg-white text-slate-900 focus:border-[#3b82f6]'
+                      }`}
+                    />
+                  )}
+                  {cnicInvalid && (
+                    <p className="text-xs text-red-500">
+                      {docLanguage === 'ur'
+                        ? `شناختی کارڈ نمبر 13 ہندسوں کا ہونا چاہیے (${value.length}/13)`
+                        : `CNIC must be exactly 13 digits (${value.length}/13)`}
+                    </p>
+                  )}
+                </div>
+              )
+            })}
           </div>
           <button
             disabled={!canGenerate}
